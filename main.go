@@ -2,6 +2,7 @@ package main
 
 import (
 	"io"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -58,10 +59,17 @@ func main() {
 	config.AllowHeaders = []string{"Content-Type", "Content-Length", "Content-Range", "Accept-Encoding", "X-CSRF-Token", "Authorization", "accept", "origin", "Cache-Control", "X-Requested-With"}
 	router.Use(cors.New(config))
 
+	router.LoadHTMLGlob("templates/*.html")
 	rg := router.Group("api/v1")
 	{
 		rg.POST("/photo", uploadFile)
 	}
+
+	router.Static("/uploads", "./uploads")
+	router.Static("/static", "./static")
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, "upload.html", gin.H{})
+	})
 
 	router.Run()
 }
