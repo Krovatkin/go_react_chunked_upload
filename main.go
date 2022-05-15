@@ -33,7 +33,7 @@ func uploadFile(c *gin.Context) {
 	file, header, e := c.Request.FormFile("file")
 
 	if f == nil {
-		f, e = os.OpenFile("uploads/"+header.Filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, os.ModePerm)
+		f, e = os.OpenFile("uploads/"+header.Filename, os.O_APPEND|os.O_CREATE|os.O_RDWR, 0644)
 		if e != nil {
 			panic("Error creating file on the filesystem: " + e.Error())
 		}
